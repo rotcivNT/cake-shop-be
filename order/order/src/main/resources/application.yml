@@ -1,0 +1,20 @@
+#spring.application.name=order
+server:
+  port: 8083
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cake_shop
+    username: root
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+  rabbitmq:
+    host: armadillo-01.rmq.cloudamqp.com
+    port: 5672
+    username: nrasswdt
+    password: ing0r9kuLADKvud5LxyJ-1XH80E5zr4s
+    virtual-host: nrasswdt
