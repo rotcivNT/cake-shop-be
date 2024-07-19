@@ -5,7 +5,7 @@ spring:
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-development:
-  cloudinary.cloud_name: dwt8nm72d
-  cloudinary.api_key: 118398793585282
-  cloudinary.api_secret: VPqOIM8CNQEVMAj6P_vCw5jl8sQ
+cloudinary:
+  cloud_name: dwt8nm72d
+  api_key: 118398793585282
+  api_secret: VPqOIM8CNQEVMAj6P_vCw5jl8sQ
