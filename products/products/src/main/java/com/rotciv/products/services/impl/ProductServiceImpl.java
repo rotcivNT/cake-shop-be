@@ -15,11 +15,15 @@ import com.rotciv.products.repository.ProductRepository;
 import com.rotciv.products.repository.ProductVariantRepository;
 import com.rotciv.products.repository.VariantRepository;
 import com.rotciv.products.services.ProductService;
+import com.rotciv.products.utils.VietnameseStringUtils;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -56,10 +60,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ResponseProductDto> getAllProducts() {
-        List<Product> products = productRepository.findAll();
+    public List<ResponseProductDto> getAllProducts(int page, int size, String query, String categoryId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> products;
+        if (!categoryId.isEmpty()) {
+            products = productRepository.findAllByCategoryId(categoryId, pageable);
+            if (products.getTotalElements() == 0) {
+                products = productRepository.findAllByCategory_ParentId(categoryId, pageable);
+            }
+        } else {
+            products = productRepository.findAll(pageable);
+        }
+        if (!query.isEmpty()) {
+            products = productRepository.findAllByNameContainingIgnoreCase(query, pageable);
+        }
         List<ResponseProductDto> responseProductDtos = new ArrayList<>();
         for (Product product : products) {
+            product.getProductVariants().sort((ProductVariant pv1, ProductVariant pv2) -> pv2.getPrice() - pv1.getPrice() > 0 ? -1 : 1);
             ResponseProductDto responseProductDto = ProductMapper.mapToDto(product);
             responseProductDtos.add(responseProductDto);
         }
@@ -137,5 +154,14 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-
+    @Override
+    public boolean updateStatus(String id, Boolean isStop) {
+        Product product = productRepository.findById(id).orElse(null);
+        if (product == null) {
+            throw new RuntimeException("Product not found");
+        }
+        product.setStop(isStop);
+        productRepository.save(product);
+        return true;
+    }
 }

@@ -1,5 +1,6 @@
 package com.rotciv.order.entity;
 
+import com.rotciv.order.enums.OrderEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,5 +14,7 @@ public class PaymentDetail extends BaseEntity {
     private String id;
     private long amount;
     private String type;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private OrderEnum.PaymentStatus status;
 }

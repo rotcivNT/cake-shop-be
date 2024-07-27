@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -32,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
         if (user != null) {
             throw new UserExistException("User already exist");
         }
+        System.out.println(createUser);
         authRepository.save(createUser);
 
     }
@@ -40,7 +42,10 @@ public class AuthServiceImpl implements AuthService {
     public User getUserByEmail(String email) {
         User user = authRepository.findByEmail(email);
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            user  = authRepository.findByClerkUserId(email);
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            }
         }
         return user;
     }

@@ -21,4 +21,6 @@ public class UpdateUserDto {
     private String phoneNumber;
 
     private boolean isBlock;
+
+    private String clerkUserId;
 }

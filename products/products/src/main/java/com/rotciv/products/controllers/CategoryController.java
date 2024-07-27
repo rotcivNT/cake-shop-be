@@ -35,12 +35,30 @@ public class CategoryController {
                     .status(HttpStatus.CREATED)
                     .body((new ResponseDto("201", "Category was created successfully")));
         } catch(Exception e) {
-            throw new RuntimeException("Error creating category");
+            throw new RuntimeException("Error creating category" + e.getMessage());
         }
     }
 
     @GetMapping("/get-category/{id}")
     public Category getCategoryById(@PathVariable("id") String id){
         return categoryService.getCategoryById(id);
+    }
+
+    @GetMapping("/get-child-category/{id}")
+    public List<Category> getChildCategory(@PathVariable("id") String id) {
+        return categoryService.getChildCategory(id);
+    }
+
+    @GetMapping("/get-category-by-name/{name}")
+    public ResponseEntity<?> getCategoryByName(@PathVariable("name") String name) {
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(categoryService.getCategoryByName(name));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseDto("404", "Category not found"));
+        }
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -53,4 +54,27 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return category;
     }
+
+    @Override
+    public List<Category> getChildCategory(String id) {
+        List<Category> child = this.categoryRepository.findByParentId(id);
+        if (child.isEmpty()) {
+            child = new ArrayList<>();
+        } else {
+            for (Category c: child) {
+                c.setProducts(null);
+            }
+        }
+        return child;
+    }
+
+    @Override
+    public Category getCategoryByName(String name) {
+        Category category = this.categoryRepository.findByName(name);
+        if (category == null) {
+            throw new RuntimeException("Category not found");
+        }
+        return category;
+    }
+
 }

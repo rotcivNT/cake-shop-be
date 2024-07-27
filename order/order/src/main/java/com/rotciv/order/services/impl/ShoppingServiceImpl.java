@@ -1,5 +1,6 @@
 package com.rotciv.order.services.impl;
 
+import com.rotciv.order.configuration.ServiceConfig;
 import com.rotciv.order.dto.CartItemDto;
 import com.rotciv.order.dto.ResponseCartItemDto;
 import com.rotciv.order.dto.ResponseSessionDto;
@@ -12,9 +13,11 @@ import com.rotciv.order.repository.CartItemRepository;
 import com.rotciv.order.repository.ShoppingSessionRepository;
 import com.rotciv.order.services.ShoppingService;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -94,8 +97,11 @@ public class ShoppingServiceImpl implements ShoppingService {
     }
 
     @Override
-    public ResponseSessionDto getShoppingSessionsByUserId(String userId) {
+    public ResponseSessionDto getShoppingSessionsByUserId(String userId) throws BadRequestException {
         ShoppingSession session = this.shoppingSessionRepository.findByUserId(userId);
+        if (session == null) {
+            throw new BadRequestException();
+        }
         ResponseSessionDto responseSessionDto = new ResponseSessionDto();
         responseSessionDto.setShoppingSession(session);
         List<CartItem> cartItems = session.getCartItems();
@@ -107,8 +113,7 @@ public class ShoppingServiceImpl implements ShoppingService {
             responseCartItemDto.setProductId(cartItem.getProductId());
             responseCartItemDto.setQuantity(cartItem.getQuantity());
             responseCartItemDto.setVariantId(cartItem.getVariantId());
-
-            String productJson = this.restTemplate.getForObject("http://localhost:8081/v1/api/products/get-product/" + cartItem.getProductId(), String.class);
+            String productJson = this.restTemplate.getForObject(ServiceConfig.productServiceUrl  + "/products/get-product/" + cartItem.getProductId(), String.class);
             responseCartItemDto.setProductJson(productJson);
 
             responseCartItemDtos.add(responseCartItemDto);

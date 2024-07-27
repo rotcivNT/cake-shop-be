@@ -13,4 +13,5 @@ public class CreateUserDto {
 
     private String phoneNumber;
     private boolean isBlock;
+    private String clerkUserId;
 }

@@ -10,4 +10,6 @@ public interface CategoryService {
     public void createCategory(CreateCategoryDto createCategoryDto);
     public List<Category> getAllCategories();
     public Category getCategoryById(String id);
+    public List<Category> getChildCategory(String id);
+    public Category getCategoryByName(String name);
 }

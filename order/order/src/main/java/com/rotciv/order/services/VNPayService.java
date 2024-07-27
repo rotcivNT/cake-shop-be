@@ -3,9 +3,6 @@ package com.rotciv.order.services;
 import com.rotciv.order.configuration.VNPAYConfig;
 import com.rotciv.order.dto.VnPayResDto;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -17,9 +14,9 @@ import java.util.*;
 @Service
 public class VNPayService {
 
-    public VnPayResDto createPayment(HttpServletRequest req, String orderId, String paymentId) throws UnsupportedEncodingException {
+    public VnPayResDto createPayment(HttpServletRequest req, String orderId, String paymentId, long amount) throws UnsupportedEncodingException {
 
-        long amount = 10000000;
+        amount = amount * 100;
 
         String vnp_TxnRef = VNPAYConfig.getRandomNumber(8);
         String vnp_IpAddr = VNPAYConfig.getIpAddress(req);

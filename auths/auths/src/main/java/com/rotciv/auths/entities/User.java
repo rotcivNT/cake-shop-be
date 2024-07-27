@@ -27,4 +27,7 @@ public class User extends BaseEntity {
 
     @Column(name = "is_block")
     private boolean isBlock;
+
+    @Column(name = "clerk_user_id")
+    private String clerkUserId;
 }

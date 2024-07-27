@@ -26,6 +26,7 @@ public class OrderMapper {
         order.setId(orderDetailDto.getOrderId());
         orderDetail.setOrder(order);
         orderDetail.setVariantId(orderDetailDto.getVariantId());
+        orderDetail.setPrice(orderDetailDto.getPrice());
         return orderDetail;
     }
 

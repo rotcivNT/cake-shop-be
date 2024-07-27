@@ -29,9 +29,11 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/get-all-products")
-    public List<ResponseProductDto> getAllProducts() {
-        return productService.getAllProducts();
+    @PostMapping("/get-all-products")
+    public List<ResponseProductDto> getAllProducts(@RequestParam String page, @RequestParam String size, @RequestParam(required = false) String q, @RequestBody() FilterProductDto filterProductDto) {
+        q = q == null ? "" : q;
+        String categoryId = filterProductDto.getCategoryId() == null ? "" : filterProductDto.getCategoryId();
+        return productService.getAllProducts(Integer.parseInt(page), Integer.parseInt(size), q, categoryId);
     }
 
     @PostMapping("/create-variant")
@@ -55,6 +57,20 @@ public class ProductController {
             boolean updated = productService.updateProduct(updateProductDto);
             if(updated){
                 return ResponseEntity.ok(new ResponseDto("200","Product updated successfully"));
+            } else {
+                return ResponseEntity.badRequest().body(new ResponseDto("400","Product not found"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ResponseDto("400", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/update-status-product/{id}")
+    public ResponseEntity<ResponseDto> stopProduct(@PathVariable String id, @RequestParam Boolean isStop) {
+        try{
+            boolean stopped = productService.updateStatus(id, isStop);
+            if(stopped){
+                return ResponseEntity.ok(new ResponseDto("200","Product stopped successfully"));
             } else {
                 return ResponseEntity.badRequest().body(new ResponseDto("400","Product not found"));
             }

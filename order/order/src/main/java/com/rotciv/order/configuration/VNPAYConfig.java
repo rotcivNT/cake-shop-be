@@ -1,5 +1,6 @@
 package com.rotciv.order.configuration;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -16,9 +17,13 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class VNPAYConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:3000/checkout/status";
+
+    public static String vnp_ReturnUrl = "https://tcake.vercel.app/checkout/status";
+
     public static String vnp_TmnCode = "7BT3E68M";
+
     public static String secretKey = "OD4UZL909QTOYAF2MJ3FBMT8X0A9VV07";
+
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
     public static String md5(String message) {
@@ -31,9 +36,7 @@ public class VNPAYConfig {
                 sb.append(String.format("%02x", b & 0xff));
             }
             digest = sb.toString();
-        } catch (UnsupportedEncodingException ex) {
-            digest = "";
-        } catch (NoSuchAlgorithmException ex) {
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
             digest = "";
         }
         return digest;

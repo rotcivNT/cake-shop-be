@@ -22,6 +22,9 @@ public class Product extends BaseEntity {
     private String description;
     private String thumbnail;
 
+    @Column(name = "is_stop")
+    private boolean isStop;
+
     @ManyToOne()
     @JoinColumn(name = "category_id")
     @JsonBackReference

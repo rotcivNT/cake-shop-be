@@ -9,4 +9,5 @@ public class OrderDetailDto {
     private int quantity;
     private String orderId;
     private String variantId;
+    private Double price;
 }

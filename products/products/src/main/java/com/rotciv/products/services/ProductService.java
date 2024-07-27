@@ -11,9 +11,10 @@ import java.util.List;
 
 public interface ProductService {
     Product createProduct(CreateProductDto createProductDto);
-    List<ResponseProductDto> getAllProducts();
+    List<ResponseProductDto> getAllProducts(int page, int size, String query, String categoryId);
     void createVariant(ProductVariantDto productVariantDto);
     List<Variant> getAllVariants();
     boolean updateProduct(UpdateProductDto updateProductDto);
     Product getProductById(String id);
+    boolean updateStatus(String id, Boolean isStop);
 }

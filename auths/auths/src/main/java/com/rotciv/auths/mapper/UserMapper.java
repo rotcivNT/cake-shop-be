@@ -31,6 +31,7 @@ public class UserMapper {
         user.setEmail(createUserDto.getEmail());
         user.setPhoneNumber(createUserDto.getPhoneNumber());
         user.setBlock(createUserDto.isBlock());
+        user.setClerkUserId(createUserDto.getClerkUserId());
         return user;
     }
 
@@ -42,7 +43,7 @@ public class UserMapper {
         user.setAddressDetail(updateUserDto.getAddressDetail());
         user.setPhoneNumber(updateUserDto.getPhoneNumber());
         user.setBlock(updateUserDto.isBlock());
-
+        user.setClerkUserId(updateUserDto.getClerkUserId());
 
         return user;
     }

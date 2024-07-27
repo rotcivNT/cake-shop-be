@@ -3,6 +3,7 @@ package com.rotciv.products.entities;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 
@@ -15,9 +16,13 @@ public class Category extends BaseEntity {
     private String id;
     private String name;
 
-    @OneToOne()
+    @ManyToOne()
     @JoinColumn(name = "parent_id")
     private Category parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private List<Category> children;
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;

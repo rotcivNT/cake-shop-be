@@ -5,9 +5,14 @@ import com.rotciv.products.entities.Category;
 
 public class CategoryMapper {
     public static Category createDtoMapToEntity(CreateCategoryDto createCategoryDto, Category category) {
-        Category parent = new Category();
-        parent.setId(createCategoryDto.getParentId());
-        category.setParent(parent);
+        if (createCategoryDto.getParentId() == null) {
+            category.setParent(null);
+        }
+        else {
+            Category parent = new Category();
+            parent.setId(createCategoryDto.getParentId());
+            category.setParent(parent);
+        }
         category.setName(createCategoryDto.getName());
         return category;
     }
